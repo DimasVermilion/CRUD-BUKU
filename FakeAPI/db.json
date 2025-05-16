@@ -1,0 +1,54 @@
+{
+  "books": [
+    {
+      "id": "1",
+      "title": "Cara Jago Vue js dalam 1 menit",
+      "author": "Dimas Vermilion",
+      "publish_date": "2007-08-16",
+      "id_category": 1
+    },
+    {
+      "id": "2",
+      "title": "Amba Potter",
+      "author": "Dimas Vermilion",
+      "publish_date": "2001-07-22",
+      "id_category": 1
+    }
+    ,
+    {
+      "id": "3",
+      "title": "Harry Potter",
+      "author": "J.K. Rowling",
+      "publish_date": "2001-07-22",
+      "id_category": 2
+    },
+    {
+      "id": "4",
+      "title": "The Lord of the Rings",
+      "author": "J.R.R. Tolkien",
+      "publish_date": "1954-07-29",
+      "id_category": 2
+    },
+    {
+      "id": "5",
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "publish_date": "1965-08-01",
+      "id_category": 3
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "category": "Horror"
+    },
+    {
+      "id": "2",
+      "category": "Fantasy"
+    },
+    {
+      "id": "3",
+      "category": "Science Fiction"
+    }
+  ]
+}

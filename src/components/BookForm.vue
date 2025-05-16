@@ -13,7 +13,12 @@
       </div>
       <div class="mb-3">
         <label class="form-label">Kategori</label>
-        <input v-model="form.category" type="text" class="form-control" required />
+        <select v-model="form.id_category" class="form-control" required>
+          <option disabled value="">Pilih Kategori</option>
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+            {{ cat.category }}
+          </option>
+        </select>
       </div>
       <button type="submit" class="btn btn-success">{{ form.id ? 'Update' : 'Tambah' }}</button>
       <button type="button" class="btn btn-secondary ms-2" @click="resetForm">Reset</button>
@@ -29,10 +34,12 @@ export default {
   data() {
     return {
       form: {
+        id: null,
         title: '',
         author: '',
-        category: '',
-      }
+        id_category: ''
+      },
+      categories: []
     }
   },
   watch: {
@@ -42,22 +49,32 @@ export default {
       }
     }
   },
+  mounted() {
+    // Ambil daftar kategori dari backend saat komponen dimount
+    axios.get('http://localhost:8000/categories')
+      .then(res => {
+        this.categories = res.data
+      })
+      .catch(err => {
+        console.error('Gagal memuat kategori:', err)
+      })
+  },
   methods: {
     handleSubmit() {
-      if (this.form.id) {
-        axios.put(`http://localhost:8000/books/${this.form.id}`, this.form).then(() => {
+      const url = `http://localhost:8000/books${this.form.id ? '/' + this.form.id : ''}`
+      const method = this.form.id ? 'put' : 'post'
+
+      axios[method](url, this.form)
+        .then(() => {
           this.$emit('refresh')
           this.resetForm()
         })
-      } else {
-        axios.post('http://localhost:8000/books', this.form).then(() => {
-          this.$emit('refresh')
-          this.resetForm()
+        .catch(err => {
+          console.error('Gagal menyimpan data buku:', err)
         })
-      }
     },
     resetForm() {
-      this.form = { title: '', author: '', category: '' }
+      this.form = { id: null, title: '', author: '', id_category: '' }
       this.$emit('clear-edit')
     }
   }

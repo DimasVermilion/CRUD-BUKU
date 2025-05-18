@@ -16,7 +16,7 @@ class BukuController extends Controller
     if ($books->isEmpty()) {
         return response()->json([
             'status'=> Response::HTTP_NOT_FOUND,
-            'massage'=>'artikel empty'
+            'massage'=>'book empty'
         ],Response::HTTP_NOT_FOUND);
         }else {
             return response()->json([
@@ -68,7 +68,7 @@ class BukuController extends Controller
 
     public function show($id)//24-nevid
     {
-        //$Artikel = Artikel::where('id', $id)->first(); //-> ngambil data sesuai id
+        //$book = book::where('id', $id)->first(); //-> ngambil data sesuai id
 
         $book = Buku::find($id); //-> ngambil data sesuai id
 
@@ -87,7 +87,7 @@ class BukuController extends Controller
             //jika tidak berarti tampilkan else (not found)
             return response()->json([
                 'status' => Response::HTTP_NOT_FOUND,
-                'message' => 'Artikel not found'
+                'message' => 'book not found'
             ], Response::HTTP_NOT_FOUND);
         }
     }
@@ -99,7 +99,7 @@ class BukuController extends Controller
         if (!$book) {
             return response()->json([
                 'status' => Response::HTTP_NOT_FOUND,
-                'message' => 'Artikel not found'
+                'message' => 'book not found'
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -137,7 +137,7 @@ class BukuController extends Controller
         $book->delete();
             return response()->json([
                 'status'=> Response::HTTP_OK,
-                'massage'=>'artikel dihapus'
+                'massage'=>'book dihapus'
             ],Response::HTTP_OK);
     }
 }

@@ -12,7 +12,6 @@ class BukuController extends Controller
      public function index() {
 
     $books = Buku::query()->latest()->get();
-    // $artikels = $query->paginate(10);
 
     if ($books->isEmpty()) {
         return response()->json([

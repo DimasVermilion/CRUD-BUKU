@@ -1,81 +1,90 @@
-<!-- src/components/BookForm.vue -->
 <template>
   <div class="container mt-4">
-    <h3>{{ form.id ? 'Edit Buku' : 'Tambah Buku' }}</h3>
+    <h3>{{ isEdit ? 'Edit Buku' : 'Tambah Buku' }}</h3>
     <form @submit.prevent="handleSubmit">
       <div class="mb-3">
-        <label class="form-label">Judul</label>
-        <input v-model="form.title" type="text" class="form-control" required />
+        <label>Judul</label>
+        <input type="text" class="form-control" v-model="book.title" required>
       </div>
       <div class="mb-3">
-        <label class="form-label">Penulis</label>
-        <input v-model="form.author" type="text" class="form-control" required />
+        <label>Penulis</label>
+        <input type="text" class="form-control" v-model="book.author" required>
       </div>
       <div class="mb-3">
-        <label class="form-label">Kategori</label>
-        <select v-model="form.id_category" class="form-control" required>
-          <option disabled value="">Pilih Kategori</option>
-          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-            {{ cat.category }}
-          </option>
+        <label>Jumlah Halaman</label>
+        <input type="number" class="form-control" v-model="book.page" required>
+      </div>
+      <div class="mb-3">
+        <label>Tanggal Terbit</label>
+        <input type="date" class="form-control" v-model="book.publish_date" required>
+      </div>
+      <div class="mb-3">
+        <label>Kategori</label>
+        <select class="form-control" v-model="book.category_id" required>
+          <option value="" disabled>Pilih kategori</option>
+          <option v-for="cat in categories" :value="cat.id" :key="cat.id">{{ cat.category }}</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-success">{{ form.id ? 'Update' : 'Tambah' }}</button>
-      <button type="button" class="btn btn-secondary ms-2" @click="resetForm">Reset</button>
+      <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Tambah' }}</button>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@api/api.js'
 
 export default {
-  props: ['editData'],
+  props: ['editBook'],
   data() {
     return {
-      form: {
-        id: null,
+      book: {
         title: '',
         author: '',
-        id_category: ''
+        page: '',
+        category_id: '',
+        publish_date: ''
       },
+      isEdit: false,
       categories: []
     }
   },
   watch: {
-    editData(newVal) {
+    editBook(newVal) {
       if (newVal) {
-        this.form = { ...newVal }
+        this.book = { ...newVal }
+        this.book.category_id = newVal.category_id
+        this.isEdit = true
       }
     }
   },
   mounted() {
-    // Ambil daftar kategori dari backend saat komponen dimount
-    axios.get('http://localhost:8000/categories')
-      .then(res => {
-        this.categories = res.data
-      })
-      .catch(err => {
-        console.error('Gagal memuat kategori:', err)
-      })
+    api.get('/list-category').then(res => {
+      this.categories = res.data.data  || res.data
+    })
   },
   methods: {
     handleSubmit() {
-      const url = `http://localhost:8000/books${this.form.id ? '/' + this.form.id : ''}`
-      const method = this.form.id ? 'put' : 'post'
-
-      axios[method](url, this.form)
-        .then(() => {
-          this.$emit('refresh')
+      if (this.isEdit) {
+      api.put(`/update-buku/${this.book.id}`, this.book).then(() => {
           this.resetForm()
+          this.$emit('refresh')
         })
-        .catch(err => {
-          console.error('Gagal menyimpan data buku:', err)
+      } else {
+        api.post('/store-buku', this.book).then(() => {
+          this.resetForm()
+          this.$emit('refresh')
         })
+      }
     },
     resetForm() {
-      this.form = { id: null, title: '', author: '', id_category: '' }
-      this.$emit('clear-edit')
+      this.book = {
+        title: '',
+        author: '',
+        page: '',
+        category_id: '',
+        publish_date: ''
+      }
+      this.isEdit = false
     }
   }
 }

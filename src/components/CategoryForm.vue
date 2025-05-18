@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@api/api.js'
 
 export default {
   props: ['editData'],
@@ -21,6 +21,7 @@ export default {
     return {
       form: {
         category: '',
+        id: null
       }
     }
   },
@@ -28,25 +29,27 @@ export default {
     editData(newVal) {
       if (newVal) {
         this.form = { ...newVal }
+      } else {
+        this.resetForm()
       }
     }
   },
   methods: {
-    handleSubmit() {
-      if (this.form.id) {
-        axios.put(`http://localhost:8000/categories/${this.form.id}`, this.form).then(() => {
-          this.$emit('refresh')
-          this.resetForm()
-        })
-      } else {
-        axios.post('http://localhost:8000/categories', this.form).then(() => {
-          this.$emit('refresh')
-          this.resetForm()
-        })
+    async handleSubmit() {
+      try {
+        if (this.form.id) {
+          await api.put(`/update-category/${this.form.id}`, this.form)
+        } else {
+          await api.post('/store-category', this.form)
+        }
+        this.$emit('refresh')
+        this.resetForm()
+      } catch (error) {
+        console.error('Error saat submit kategori:', error)
       }
     },
     resetForm() {
-      this.form = { category: '' }
+      this.form = { category: '', id: null }
       this.$emit('clear-edit')
     }
   }

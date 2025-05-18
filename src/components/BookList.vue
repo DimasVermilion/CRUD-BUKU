@@ -6,6 +6,8 @@
         <tr>
           <th>Judul</th>
           <th>Penulis</th>
+          <th>Halaman</th>
+          <th>Tanggal Terbit</th>
           <th>Kategori</th>
           <th>Aksi</th>
         </tr>
@@ -14,7 +16,9 @@
         <tr v-for="book in books" :key="book.id">
           <td>{{ book.title }}</td>
           <td>{{ book.author }}</td>
-          <td>{{ book.category_name }}</td> <!-- ini sudah diganti -->
+          <td>{{ book.page }}</td>
+          <td>{{ book.publish_date }}</td>
+          <td>{{ book.category }}</td>
           <td>
             <button class="btn btn-sm btn-primary me-2" @click="$emit('edit-book', book)">Edit</button>
             <button class="btn btn-sm btn-danger" @click="deleteBook(book.id)">Hapus</button>
@@ -26,40 +30,27 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@api/api.js'
 
 export default {
   data() {
     return {
-      books: [],
-      categories: []
+      books: []
     }
   },
   methods: {
-    async fetchBooksAndCategories() {
-      const [booksRes, categoriesRes] = await Promise.all([
-        axios.get('http://localhost:8000/books'),
-        axios.get('http://localhost:8000/categories')
-      ])
-
-      this.categories = categoriesRes.data
-
-      this.books = booksRes.data.map(book => {
-        const category = this.categories.find(cat => cat.id == book.id_category)
-        return {
-          ...book,
-          category_name: category ? category.category : 'Tidak diketahui'
-        }
-      })
+    async fetchBooks() {
+      const res = await api.get('/list-buku')
+      this.books = res.data.data
     },
     deleteBook(id) {
-      axios.delete(`http://localhost:8000/books/${id}`).then(() => {
-        this.fetchBooksAndCategories()
+      api.delete(`/delete-buku/${id}`).then(() => {
+        this.fetchBooks()
       })
     }
   },
   mounted() {
-    this.fetchBooksAndCategories()
+    this.fetchBooks()
   }
 }
 </script>

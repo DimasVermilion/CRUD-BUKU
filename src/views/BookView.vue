@@ -1,7 +1,7 @@
 <!-- src/views/BookView.vue -->
 <template>
   <div>
-    <BookForm :editData="selectedBook" @refresh="loadBooks" @clear-edit="selectedBook = null" />
+    <BookForm :editBook="selectedBook" @refresh="loadBooks" @clear-edit="selectedBook = null" />
     <BookList ref="bookList" @edit-book="selectedBook = $event" />
   </div>
 </template>

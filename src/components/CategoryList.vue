@@ -1,4 +1,3 @@
-<!-- src/components/CategoryList.vue -->
 <template>
   <div class="container mt-4">
     <h3>Daftar Kategori</h3>
@@ -22,26 +21,31 @@
   </div>
 </template>
 
-
 <script>
-import axios from 'axios'
+import api from '@api/api.js'
 
 export default {
   data() {
     return {
-      categories: [],
+      categories: []
     }
   },
   methods: {
-    fetchCategories() {
-      axios.get('http://localhost:8000/categories').then(res => {
-        this.categories = res.data
-      })
+    async fetchCategories() {
+      try {
+        const res = await api.get('/list-category')
+        this.categories = res.data.data || res.data
+      } catch (error) {
+        console.error('Gagal mengambil data kategori:', error)
+      }
     },
-    deleteCategory(id) {
-      axios.delete(`http://localhost:8000/categories/${id}`).then(() => {
+    async deleteCategory(id) {
+      try {
+        await api.delete(`/delete-category/${id}`)
         this.fetchCategories()
-      })
+      } catch (error) {
+        console.error('Gagal menghapus kategori:', error)
+      }
     }
   },
   mounted() {

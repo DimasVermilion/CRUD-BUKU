@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
@@ -21,9 +22,13 @@ Route::get('read-category/{id}',[CategoryController::class,'show']);
 Route::put('update-category/{id}',[CategoryController::class,'update']);
 Route::delete('delete-category/{id}',[CategoryController::class,'destroy']);
 
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

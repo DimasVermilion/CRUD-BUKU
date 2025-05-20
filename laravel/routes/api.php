@@ -17,6 +17,7 @@ Route::put('update-buku/{id}',[BukuController::class,'update']);
 Route::delete('delete-buku/{id}',[BukuController::class,'destroy']);
 
 Route::get('list-category', [CategoryController::class, 'index']);
+Route::get('list-category-book/{id}', [CategoryController::class, 'showBook']);
 Route::post('store-category', [CategoryController::class, 'store']);
 Route::get('read-category/{id}',[CategoryController::class,'show']);
 Route::put('update-category/{id}',[CategoryController::class,'update']);
@@ -24,9 +25,6 @@ Route::delete('delete-category/{id}',[CategoryController::class,'destroy']);
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-
-
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });

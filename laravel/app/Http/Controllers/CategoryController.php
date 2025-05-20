@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -115,5 +116,31 @@ class CategoryController extends Controller
                 'status'=> Response::HTTP_OK,
                 'massage'=>'category dihapus'
             ],Response::HTTP_OK);
+    }
+
+    public function showBook($id){
+        $category = Category::find($id);
+
+        if ($category) {
+            return response()->json([
+                'status' => Response::HTTP_OK,
+                'books' => $category->buku->map(function ($book) {
+                 return [
+                     'title' => $book->title,
+                     'author' => $book->author,
+                     'page' => $book->page,
+                     'category' => $book->category->category,
+                     'publish_date' => $book->publish_date
+                ];
+    })
+
+            ], Response::HTTP_OK);
+        } else {
+            //jika tidak berarti tampilkan else (not found)
+            return response()->json([
+                'status' => Response::HTTP_NOT_FOUND,
+                'message' => 'category not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 }

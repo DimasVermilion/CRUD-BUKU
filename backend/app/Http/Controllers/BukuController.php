@@ -16,7 +16,7 @@ class BukuController extends Controller
     if ($books->isEmpty()) {
         return response()->json([
             'status'=> Response::HTTP_NOT_FOUND,
-            'massage'=>'artikel empty'
+            'massage'=>'Book empty'
         ],Response::HTTP_NOT_FOUND);
         }else {
             return response()->json([

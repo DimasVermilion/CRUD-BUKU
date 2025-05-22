@@ -2,7 +2,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/">Perpustakaan</router-link>
+      <router-link class="navbar-brand" to="/home">Perpustakaan</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -15,14 +15,14 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/home">Home</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/books">Buku</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/categories">Kategori</router-link>
-          </li>
+          </li>        
         </ul>
       </div>
     </div>
@@ -31,6 +31,7 @@
 
 <script>
 export default {
-  name: 'Navbar'
+  name: 'Navbar',
 }
+
 </script>
